@@ -5,8 +5,9 @@ use Cronguard\Resources\Monitors;
 use Cronguard\Resources\Notifications;
 class Client
 {
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.0.1';
     protected GuzzleClient $http;
+
     public function __construct(string $apiKey, string $baseUrl = 'https://api.cronguard.dev/v1/')
     {
         $this->http = new GuzzleClient([
@@ -17,15 +18,23 @@ class Client
                 'Content-Type'  => 'application/json',
                 'User-Agent'    => 'Cronguard-PHP-SDK/' . self::VERSION,
             ],
-            'http_errors' => false, // Permite tratarmos erros manualmente se precisar
+            'http_errors' => false,
         ]);
     }
+
     public function monitors(): Monitors
     {
         return new Monitors($this->http);
     }
+
     public function notifications(): Notifications
     {
         return new Notifications($this->http);
+    }
+
+    public function ping(string $uuid)
+    {
+        $response = $this->http->request('GET', "ping/{$uuid}");
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

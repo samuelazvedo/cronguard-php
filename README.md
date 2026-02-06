@@ -25,6 +25,14 @@ use Cronguard\Client;
 $client = new Client('YOUR_API_KEY');
 ```
 
+### Ping
+
+You can ping a monitor using its UUID:
+
+```php
+$client->ping('MONITOR_UUID');
+```
+
 ### Monitors
 
 List all monitors:
